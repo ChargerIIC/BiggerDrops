@@ -32,6 +32,7 @@ namespace BiggerDrops
             Helper.LoadState(save.InstanceGUID, save.SaveTime);
         }
     }
+
     [HarmonyPatch(typeof(SGCmdCenterLanceConfigBG), "OnAddedToHierarchy")]
     public static class SGCmdCenterLanceConfigBG_OnAddedToHierarchy
     {
@@ -41,6 +42,7 @@ namespace BiggerDrops
             __instance.LC.UpdateSlotsCount(Settings.MAX_ADDITINAL_MECH_SLOTS + BiggerDrops.settings.additinalMechSlots);
         }
     }
+
     [HarmonyPatch(typeof(LancePreviewPanel), "SaveLance")]
     public static class LancePreviewPanel_SaveLance
     {
@@ -50,6 +52,7 @@ namespace BiggerDrops
             Logger.M.WL(0, lanceToSave.ToJSON(), true);
         }
     }
+
     [HarmonyPatch(typeof(LancePreviewPanel), "SetData")]
     public static class LancePreviewPanel_SetData
     {
@@ -82,6 +85,7 @@ namespace BiggerDrops
             }
         }
     }
+
     [HarmonyPatch(typeof(SkirmishMechBayPanel), "SelectLance")]
     public static class SkirmishMechBayPanel_SelectLance
     {
@@ -119,6 +123,12 @@ namespace BiggerDrops
         }
     }
 
+    /// <summary>
+    /// Creates a second lance list as needed 
+    /// </summary>
+    /// <todo>
+    /// Refactor to support a third row for a max of 12 drops
+    /// </todo>
     [HarmonyPatch(typeof(LanceConfiguratorPanel), "SetData")]
     public static class LanceConfiguratorPanel_SetData
     {
@@ -134,39 +144,24 @@ namespace BiggerDrops
                     return;
                 };
                 GameObject primelayout = panel.transform.FindRecursive("uixPrfPanel_LC_LanceSlots-Widget-MANAGED").gameObject;
-                GameObject newLayout = GameObject.Instantiate(primelayout);
-                newLayout.transform.parent = primelayout.transform.parent;
-                newLayout.name = "AlliedSlots";
-                GameObject slot1 = newLayout.transform.FindRecursive("lanceSlot1").gameObject;
-                GameObject slot2 = newLayout.transform.FindRecursive("lanceSlot2").gameObject;
-                GameObject slot3 = newLayout.transform.FindRecursive("lanceSlot3").gameObject;
-                GameObject slot4 = newLayout.transform.FindRecursive("lanceSlot4").gameObject;
-                primelayout.transform.FindRecursive("simbg").gameObject.active = false;
-                newLayout.transform.FindRecursive("simbg").gameObject.active = false;
-                newLayout.transform.FindRecursive("layout-lanceRating").gameObject.active = false;
-                newLayout.transform.FindRecursive("lanceSlotHeader-Campaign").gameObject.active = true;
-                newLayout.transform.FindRecursive("txt-unreadyLanceError").gameObject.active = false;
-                TextMeshProUGUI aiText = newLayout.transform.FindRecursive("label-readyLanceHeading").gameObject.GetComponent<TextMeshProUGUI>();
-                aiText.text = BiggerDrops.settings.additionalLanceName;
-                primelayout.transform.position = new Vector3(650, 315, primelayout.transform.position.z);
-                primelayout.transform.localScale = new Vector3(0.7f, 0.7f, 0.7f);
-                newLayout.transform.position = new Vector3(650, 83, primelayout.transform.position.z);
-                newLayout.transform.localScale = new Vector3(0.7f, 0.7f, 0.7f);
+                var newLayout = createNewLancePanel(primelayout, 1);
 
                 GameObject deployButton = panel.transform.FindRecursive("DeployBttn-layout").gameObject;
                 deployButton.transform.position = new Vector3(1675, 175, deployButton.transform.position.z);
 
-                //LanceLoadoutSlot[] loadoutSlots = (LanceLoadoutSlot[])AccessTools.Field(typeof(LanceConfiguratorPanel), "loadoutSlots").GetValue(panel);
                 List<LanceLoadoutSlot> list = loadoutSlots.ToList();
                 int addUnits = maxUnits - Settings.DEFAULT_MECH_SLOTS;
                 for (int i = 0; i < BiggerDrops.baysAlreadyAdded; i++)
                 {
                     list.RemoveAt(Settings.DEFAULT_MECH_SLOTS + i);
                 }
-                if (addUnits > 0) { list.Add(slot1.GetComponent<LanceLoadoutSlot>()); }
-                if (addUnits > 1) { list.Add(slot2.GetComponent<LanceLoadoutSlot>()); }
-                if (addUnits > 2) { list.Add(slot3.GetComponent<LanceLoadoutSlot>()); }
-                if (addUnits > 3) { list.Add(slot4.GetComponent<LanceLoadoutSlot>()); }
+
+                for (int s = addUnits; s > addUnits; s--)
+                {
+                    var slot = newLayout.transform.FindRecursive("lanceSlot"+s).gameObject;
+                    list.Add(slot.GetComponent<LanceLoadoutSlot>());
+                }
+
                 loadoutSlots = list.ToArray<LanceLoadoutSlot>();
                 AccessTools.Field(typeof(LanceConfiguratorPanel), "loadoutSlots").SetValue(panel, loadoutSlots);
 
@@ -199,6 +194,37 @@ namespace BiggerDrops
                 Logger.M.TWL(0, e.ToString());
             }
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="primelayout"></param>
+        /// <param name="idx"></param>
+        private static GameObject createNewLancePanel(GameObject primelayout, int idx)
+        {
+            //Create a copy of the prime lance layout panel
+            GameObject newLayout = GameObject.Instantiate(primelayout);
+            newLayout.transform.SetParent(primelayout.transform);
+            newLayout.name = "AlliedSlots"+idx.ToString();
+
+            //Hide controls that shouldn't show
+            primelayout.transform.FindRecursive("simbg").gameObject.SetActive(false);
+            newLayout.transform.FindRecursive("simbg").gameObject.SetActive(false);
+            newLayout.transform.FindRecursive("layout-lanceRating").gameObject.SetActive(false);
+            newLayout.transform.FindRecursive("lanceSlotHeader-Campaign").gameObject.SetActive(false);
+            newLayout.transform.FindRecursive("txt-unreadyLanceError").gameObject.SetActive(false);
+            TextMeshProUGUI aiText = newLayout.transform.FindRecursive("label-readyLanceHeading").gameObject.GetComponent<TextMeshProUGUI>();
+            aiText.text = BiggerDrops.settings.additionalLanceName+idx.ToString();
+
+            //Rescale and relocate panels
+            primelayout.transform.position = new Vector3(650, 315, primelayout.transform.position.z);
+            primelayout.transform.localScale = new Vector3(0.7f, 0.7f, 0.7f);
+            newLayout.transform.position = new Vector3(650, 83, primelayout.transform.position.z);
+            newLayout.transform.localScale = new Vector3(0.7f, 0.7f, 0.7f);
+
+            return newLayout;
+        }
+
         static void Prefix(LanceConfiguratorPanel __instance, ref int maxUnits, Contract contract)
         {
             try
@@ -252,6 +278,7 @@ namespace BiggerDrops
             }
         }
     }
+
     [HarmonyPatch(typeof(LanceConfiguratorPanel), "CreateLanceDef")]
     public static class LanceConfiguratorPanel_CreateLanceDef
     {
@@ -267,6 +294,7 @@ namespace BiggerDrops
             Logger.M.WL(0, __result.ToJSON());
         }
     }
+
     [HarmonyPatch(typeof(LancePreviewPanel), "OnLanceConfiguratorConfirm")]
     public static class LancePreviewPanel_OnLanceConfiguratorConfirm
     {
@@ -275,6 +303,7 @@ namespace BiggerDrops
             Logger.M.TWL(0, "LancePreviewPanel.OnLanceConfiguratorConfirm", true);
         }
     }
+
     [HarmonyPatch(typeof(LancePreviewPanel), "OnLanceConfiguratorCancel")]
     public static class LancePreviewPanel_OnLanceConfiguratorCancel
     {
@@ -640,65 +669,8 @@ namespace BiggerDrops
         }
         public static bool Prefix(SGEngineeringScreen __instance, ShipModuleUpgrade upgrade)
         {
-            if (!BiggerDrops.settings.showAdditionalArgoUpgrades)
-            {
-                return true;
-            }
-            try
-            {
-                //Todo: upgrades at or below this are vanilla
-                if (upgrade.ShipUpgradeCategoryValue.IsVanilla /*upgrade.ShipUpgradeCategoryValue.ID <= ShipUpgradeCategoryEnumeration.GetShipUpgradeCategoryByName("TRAINING").ID*/)
-                {
-                    return true;
-                }
-
-                if (__instance.transform.FindRecursive("BDUpgradePanel") != null)
-                {
-                    GameObject primelayout = __instance.transform.FindRecursive("BDUpgradePanel").gameObject;
-                    Transform BDMechDrops = primelayout.transform.FindRecursive("BDMechDrops");
-                    Transform BDMechControl = primelayout.transform.FindRecursive("BDMechControl");
-                    Transform BDDropTonnage = primelayout.transform.FindRecursive("BDDropTonnage");
-                    List<ShipModuleUpgrade> available = (List<ShipModuleUpgrade>)AccessTools.Field(typeof(SGEngineeringScreen), "AvailableUpgrades").GetValue(__instance);
-                    List<ShipModuleUpgrade> purchased = (List<ShipModuleUpgrade>)AccessTools.Field(typeof(SGEngineeringScreen), "PurchasedUpgrades").GetValue(__instance);
-                    SimGameState simGame = (SimGameState)AccessTools.Property(typeof(SGEngineeringScreen), "simState").GetValue(__instance);
-                    UIManager uiManager = (UIManager)AccessTools.Field(typeof(SGEngineeringScreen), "uiManager").GetValue(__instance);
-                    Transform parent;
-                    if (upgrade.ShipUpgradeCategoryValue.Name == "BDDropTonnage")
-                    {
-                        parent = BDDropTonnage;
-                    }
-                    else if (upgrade.ShipUpgradeCategoryValue.Name == "BDMechControl")
-                    {
-                        parent = BDMechControl;
-                    }
-                    else if (upgrade.ShipUpgradeCategoryValue.Name == "BDMechDrops")
-                    {
-                        parent = BDMechDrops;
-                    }
-                    else
-                    {
-                        Debug.LogWarning((object)string.Format("Invalid location ({0}) for ship module {1}", (object)upgrade.Location, (object)upgrade.Description.Id));
-                        return false;
-                    }
-                    string id = "uixPrfIndc_SIM_argoUpgradePipUnavailable-element";
-                    if (available.Contains(upgrade))
-                        id = "uixPrfIndc_SIM_argoUpgradePipAvailable-element";
-                    else if (purchased.Contains(upgrade))
-                        id = "uixPrfIndc_SIM_argoUpgradePip-element";
-                    SGEngineeringShipUpgradePip component = uiManager.dataManager.PooledInstantiate(id, BattleTechResourceType.UIModulePrefabs, new Vector3?(), new Quaternion?(), parent).GetComponent<SGEngineeringShipUpgradePip>();
-                    component.transform.localScale = Vector3.one;
-                    component.SetUpgadeModule(upgrade);
-                    simGame.RequestItem<SVGAsset>(upgrade.Description.Icon, new Action<SVGAsset>(component.SetIcon), BattleTechResourceType.SVGAsset);
-                    component.OnModuleSelected.RemoveAllListeners();
-                    component.OnModuleSelected.AddListener(new UnityAction<ShipModuleUpgrade>(__instance.UpgradeSelected));
-                }
-
-            }
-            catch (Exception e)
-            {
-                Logger.LogError(e);
-            }
-            return false;
+            //We won't be doing upgrade UI
+            return true;
         }
     }
 
