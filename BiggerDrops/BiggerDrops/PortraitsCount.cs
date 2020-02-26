@@ -1,6 +1,6 @@
 ﻿using BattleTech;
 using BattleTech.UI;
-using Harmony;;
+using Harmony;
 using System;
 using System.Reflection;
 using UnityEngine;
