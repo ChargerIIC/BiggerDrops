@@ -240,3 +240,7 @@ ModelManifest.xml
 
 # FAKE - F# Make
 .fake/
+
+#Harebrained Studios Propetiery Files
+BiggerDrops/lib/Assembly-CSharp.dll
+BiggerDrops/lib/Assembly-CSharp-firstpass.dll
