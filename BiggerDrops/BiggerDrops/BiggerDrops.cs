@@ -26,7 +26,7 @@ namespace BiggerDrops
             {
                 settings = new Settings();
                 Logger.InitLog();
-                Logger.M.TWL(0, "BiggerDrop log init exception " + e.ToString(), true);
+                Logger.M.TWL(0, string.Format("BiggerDrop log init exception. Looking for: {0}{1}{2}" ,directory,Environment.NewLine, e.ToString()), true);
             }
             try
             {
@@ -37,7 +37,7 @@ namespace BiggerDrops
             }
             catch (Exception e)
             {
-                Logger.M.TWL(0, e.ToString());
+                Logger.M.TWL(0, string.Format("Error patching Assebly: {0}{1}",Environment.NewLine,e.ToString()));
             }
         }
     }
