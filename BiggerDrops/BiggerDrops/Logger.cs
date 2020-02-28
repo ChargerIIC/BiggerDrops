@@ -74,13 +74,13 @@ namespace BiggerDrops
         public void TW(int initiation, string line, bool isCritical = false)
         {
             string init = new string(' ', initiation);
-            line = "[" + DateTime.Now.ToString("HH:mm:ss.fff") + "]" + init + line;
+            line = "[" + DateTime.Now.ToString("F") + "]" + init + line;
             this.W(line, isCritical);
         }
         public void TWL(int initiation, string line, bool isCritical = false)
         {
             string init = new string(' ', initiation);
-            line = "[" + DateTime.Now.ToString("HH:mm:ss.fff") + "]" + init + line;
+            line = "[" + DateTime.Now.ToString("F") + "]" + init + line;
             this.WL(line, isCritical);
         }
     }
