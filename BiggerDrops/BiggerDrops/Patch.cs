@@ -134,6 +134,7 @@ namespace BiggerDrops
                     return;
                 };
                 GameObject primelayout = panel.transform.FindRecursive("uixPrfPanel_LC_LanceSlots-Widget-MANAGED").gameObject;
+                //Create a copy of the lanceslots control
                 GameObject newLayout = GameObject.Instantiate(primelayout);
                 newLayout.transform.parent = primelayout.transform.parent;
                 newLayout.name = "AlliedSlots";
@@ -141,13 +142,14 @@ namespace BiggerDrops
                 GameObject slot2 = newLayout.transform.FindRecursive("lanceSlot2").gameObject;
                 GameObject slot3 = newLayout.transform.FindRecursive("lanceSlot3").gameObject;
                 GameObject slot4 = newLayout.transform.FindRecursive("lanceSlot4").gameObject;
-                primelayout.transform.FindRecursive("simbg").gameObject.active = false;
-                newLayout.transform.FindRecursive("simbg").gameObject.active = false;
-                newLayout.transform.FindRecursive("layout-lanceRating").gameObject.active = false;
-                newLayout.transform.FindRecursive("lanceSlotHeader-Campaign").gameObject.active = true;
-                newLayout.transform.FindRecursive("txt-unreadyLanceError").gameObject.active = false;
+                primelayout.transform.FindRecursive("simbg").gameObject.SetActive(false);
+                newLayout.transform.FindRecursive("simbg").gameObject.SetActive(false);
+                newLayout.transform.FindRecursive("layout-lanceRating").gameObject.SetActive(false);
+                newLayout.transform.FindRecursive("lanceSlotHeader-Campaign").gameObject.SetActive(true);
+                newLayout.transform.FindRecursive("txt-unreadyLanceError").gameObject.SetActive(false);
                 TextMeshProUGUI aiText = newLayout.transform.FindRecursive("label-readyLanceHeading").gameObject.GetComponent<TextMeshProUGUI>();
                 aiText.text = BiggerDrops.settings.additionalLanceName;
+                //shrink both slots to 70% and reposition
                 primelayout.transform.position = new Vector3(650, 315, primelayout.transform.position.z);
                 primelayout.transform.localScale = new Vector3(0.7f, 0.7f, 0.7f);
                 newLayout.transform.position = new Vector3(650, 83, primelayout.transform.position.z);
@@ -156,17 +158,29 @@ namespace BiggerDrops
                 GameObject deployButton = panel.transform.FindRecursive("DeployBttn-layout").gameObject;
                 deployButton.transform.position = new Vector3(1675, 175, deployButton.transform.position.z);
 
-                //LanceLoadoutSlot[] loadoutSlots = (LanceLoadoutSlot[])AccessTools.Field(typeof(LanceConfiguratorPanel), "loadoutSlots").GetValue(panel);
                 List<LanceLoadoutSlot> list = loadoutSlots.ToList();
                 int addUnits = maxUnits - Settings.DEFAULT_MECH_SLOTS;
                 for (int i = 0; i < BiggerDrops.baysAlreadyAdded; i++)
                 {
-                    list.RemoveAt(Settings.DEFAULT_MECH_SLOTS + i);
+                    var slotNum = Settings.DEFAULT_MECH_SLOTS + i;
+                    if (list[slotNum])
+                    {
+                        list.RemoveAt(slotNum);
+                    }
+                    else
+                    {
+                        Logger.M.TWL(0,"Error: index not found in UpdateSlotsCount: "+i.ToString());
+                    }
+
                 }
-                if (addUnits > 0) { list.Add(slot1.GetComponent<LanceLoadoutSlot>()); }
-                if (addUnits > 1) { list.Add(slot2.GetComponent<LanceLoadoutSlot>()); }
-                if (addUnits > 2) { list.Add(slot3.GetComponent<LanceLoadoutSlot>()); }
-                if (addUnits > 3) { list.Add(slot4.GetComponent<LanceLoadoutSlot>()); }
+                list.Add(slot1.GetComponent<LanceLoadoutSlot>());
+                list.Add(slot2.GetComponent<LanceLoadoutSlot>());
+                list.Add(slot3.GetComponent<LanceLoadoutSlot>());
+                list.Add(slot4.GetComponent<LanceLoadoutSlot>());
+                //if (addUnits > 0) { list.Add(slot1.GetComponent<LanceLoadoutSlot>()); }
+                //if (addUnits > 1) { list.Add(slot2.GetComponent<LanceLoadoutSlot>()); }
+                //if (addUnits > 2) { list.Add(slot3.GetComponent<LanceLoadoutSlot>()); }
+                //if (addUnits > 3) { list.Add(slot4.GetComponent<LanceLoadoutSlot>()); }
                 loadoutSlots = list.ToArray<LanceLoadoutSlot>();
                 AccessTools.Field(typeof(LanceConfiguratorPanel), "loadoutSlots").SetValue(panel, loadoutSlots);
 
@@ -174,6 +188,10 @@ namespace BiggerDrops
                 float[] slotMinTonnages = (float[])AccessTools.Field(typeof(LanceConfiguratorPanel), "slotMinTonnages").GetValue(panel);
                 List<float> listMaxTonnages = slotMaxTonnages.ToList();
                 List<float> listMinTonnages = slotMinTonnages.ToList();
+
+                Logger.M.TWL(0, string.Format("Debug BiigerDrops.baysAlreadAdded: {0}", BiggerDrops.baysAlreadyAdded), true);
+                Logger.M.TWL(0, string.Format("Debug Settings.DEFAULT_MECH_SLOTS: {0}", Settings.DEFAULT_MECH_SLOTS), true);
+
                 for (int i = 0; i < BiggerDrops.baysAlreadyAdded; i++)
                 {
                     listMaxTonnages.RemoveAt(Settings.DEFAULT_MECH_SLOTS + i);
