@@ -6,7 +6,7 @@ namespace BiggerDrops
 {
     public class Settings
     {
-        public static readonly int MAX_ADDITINAL_MECH_SLOTS = 8;
+        public static readonly int MAX_ADDITINAL_MECH_SLOTS = 4;
         public static readonly int DEFAULT_MECH_SLOTS = 4; //Number of slots already in the nonmodded game. Currently 4
         public static readonly string EMPLOYER_LANCE_GUID = "ecc8d4f2-74b4-465d-adf6-84445e5dfc230";
         public static readonly string ADDITIONAL_MECH_STAT = "BiggerDrops_AdditionalMechSlots";
