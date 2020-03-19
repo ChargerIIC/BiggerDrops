@@ -37,7 +37,7 @@ namespace BiggerDrops
             }
             catch (Exception e)
             {
-                Logger.M.TWL(0, string.Format("Error patching Assebly: {0}{1}",Environment.NewLine,e.ToString()));
+                Logger.M.TWL(0, string.Format("Error patching Assembly: {0}{1}",Environment.NewLine,e.ToString()));
             }
         }
     }

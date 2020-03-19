@@ -173,14 +173,14 @@ namespace BiggerDrops
                     }
 
                 }
-                list.Add(slot1.GetComponent<LanceLoadoutSlot>());
-                list.Add(slot2.GetComponent<LanceLoadoutSlot>());
-                list.Add(slot3.GetComponent<LanceLoadoutSlot>());
-                list.Add(slot4.GetComponent<LanceLoadoutSlot>());
-                //if (addUnits > 0) { list.Add(slot1.GetComponent<LanceLoadoutSlot>()); }
-                //if (addUnits > 1) { list.Add(slot2.GetComponent<LanceLoadoutSlot>()); }
-                //if (addUnits > 2) { list.Add(slot3.GetComponent<LanceLoadoutSlot>()); }
-                //if (addUnits > 3) { list.Add(slot4.GetComponent<LanceLoadoutSlot>()); }
+                //list.Add(slot1.GetComponent<LanceLoadoutSlot>());
+                //list.Add(slot2.GetComponent<LanceLoadoutSlot>());
+                //list.Add(slot3.GetComponent<LanceLoadoutSlot>());
+                //list.Add(slot4.GetComponent<LanceLoadoutSlot>());
+                if (addUnits > 0) { list.Add(slot1.GetComponent<LanceLoadoutSlot>()); }
+                if (addUnits > 1) { list.Add(slot2.GetComponent<LanceLoadoutSlot>()); }
+                if (addUnits > 2) { list.Add(slot3.GetComponent<LanceLoadoutSlot>()); }
+                if (addUnits > 3) { list.Add(slot4.GetComponent<LanceLoadoutSlot>()); }
                 loadoutSlots = list.ToArray<LanceLoadoutSlot>();
                 AccessTools.Field(typeof(LanceConfiguratorPanel), "loadoutSlots").SetValue(panel, loadoutSlots);
 
@@ -189,8 +189,8 @@ namespace BiggerDrops
                 List<float> listMaxTonnages = slotMaxTonnages.ToList();
                 List<float> listMinTonnages = slotMinTonnages.ToList();
 
-                Logger.M.TWL(0, string.Format("Debug BiigerDrops.baysAlreadAdded: {0}", BiggerDrops.baysAlreadyAdded), true);
-                Logger.M.TWL(0, string.Format("Debug Settings.DEFAULT_MECH_SLOTS: {0}", Settings.DEFAULT_MECH_SLOTS), true);
+                //Logger.M.TWL(0, string.Format("Debug BiigerDrops.baysAlreadAdded: {0}", BiggerDrops.baysAlreadyAdded), true);
+                //Logger.M.TWL(0, string.Format("Debug Settings.DEFAULT_MECH_SLOTS: {0}", Settings.DEFAULT_MECH_SLOTS), true);
 
                 for (int i = 0; i < BiggerDrops.baysAlreadyAdded; i++)
                 {
