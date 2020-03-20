@@ -11,9 +11,7 @@ Settings
   "defaultMaxTonnage": 800, - max tonnage by default, if contract not overriding it.
   "allowUpgrades" : true, - when true, turns additinalMechSlots, additinalPlayerMechSlots & defaultMaxTonnage into default values and allows argo upgrades or events to modify these values by accessing 
 							BiggerDrops_AdditionalMechSlots, BiggerDrops_AdditionalPlayerMechSlots or BiggerDrops_MaxTonnage stats in the simGame's statcollection
-  "showAdditionalArgoUpgrades" : true, - when true modify the argo upgrade screen to show an additional row of upgrades.
-										 Note: because the upgrade category is currently controlled by an enum, existing values of POWER_SYSTEM, STRUCTURE & DRIVE_SYSTEM are reused for the 1st, second and 3rd categories within the new row.
-										 to add items to these categories, the upgrade location must be set to UNKNOWN.
+ 
   "argoUpgradeName" : "Command & Control", sets the name of the new row of upgrades on the argo upgrade screen if enabled
   "argoUpgradeCategory1Name" : "Drop Size", sets the name of the first new upgrade category on upgrades on the argo upgrade screen if enabled
   "argoUpgradeCategory2Name" : "Mech Control", sets the name of the second new upgrade category on upgrades on the argo upgrade screen if enabled
