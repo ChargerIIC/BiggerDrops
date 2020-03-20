@@ -5,7 +5,6 @@
   "additinalPlayerMechSlots": 4,
   "defaultMaxTonnage": 800,
   "allowUpgrades" : false,
-  "showAdditionalArgoUpgrades" : false,
   "argoUpgradeName" : "Command & Control",
   "argoUpgradeCategory1Name" : "Drop Size",
   "argoUpgradeCategory2Name" : "Mech Control",

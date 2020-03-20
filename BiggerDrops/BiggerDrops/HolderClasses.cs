@@ -16,7 +16,6 @@ namespace BiggerDrops
         public int skirmishMax { get; set; }
         public string additionalLanceName { get; set; }
         public bool allowUpgrades { get; set; }
-        public bool showAdditionalArgoUpgrades { get; set; }
         public string argoUpgradeName { get; set; }
         public string argoUpgradeCategory1Name { get; set; }
         public string argoUpgradeCategory2Name { get; set; }
@@ -101,7 +100,6 @@ namespace BiggerDrops
             additionalLanceName = "AI LANCE";
             FmaxTonnage = 500;
             allowUpgrades = false;
-            showAdditionalArgoUpgrades = false;
             argoUpgradeName = "Command & Control";
             argoUpgradeCategory1Name = "Drop Size";
             argoUpgradeCategory2Name = "Mech Control";
