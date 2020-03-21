@@ -134,31 +134,10 @@ namespace DropManagement
                     return;
                 };
                 GameObject primelayout = panel.transform.FindRecursive("uixPrfPanel_LC_LanceSlots-Widget-MANAGED").gameObject;
-                //Create a copy of the lanceslots control
-                GameObject newLayout = GameObject.Instantiate(primelayout);
-                newLayout.transform.parent = primelayout.transform.parent;
-                newLayout.name = "AlliedSlots";
-                GameObject slot1 = newLayout.transform.FindRecursive("lanceSlot1").gameObject;
-                GameObject slot2 = newLayout.transform.FindRecursive("lanceSlot2").gameObject;
-                GameObject slot3 = newLayout.transform.FindRecursive("lanceSlot3").gameObject;
-                GameObject slot4 = newLayout.transform.FindRecursive("lanceSlot4").gameObject;
-                primelayout.transform.FindRecursive("simbg").gameObject.SetActive(false);
-                newLayout.transform.FindRecursive("simbg").gameObject.SetActive(false);
-                newLayout.transform.FindRecursive("layout-lanceRating").gameObject.SetActive(false);
-                newLayout.transform.FindRecursive("lanceSlotHeader-Campaign").gameObject.SetActive(true);
-                newLayout.transform.FindRecursive("txt-unreadyLanceError").gameObject.SetActive(false);
-                TextMeshProUGUI aiText = newLayout.transform.FindRecursive("label-readyLanceHeading").gameObject.GetComponent<TextMeshProUGUI>();
-                aiText.text = DropManagement.settings.additionalLanceName;
-                //shrink both slots to 70% and reposition
-                primelayout.transform.position = new Vector3(650, 315, primelayout.transform.position.z);
-                primelayout.transform.localScale = new Vector3(0.7f, 0.7f, 0.7f);
-                newLayout.transform.position = new Vector3(650, 83, primelayout.transform.position.z);
-                newLayout.transform.localScale = new Vector3(0.7f, 0.7f, 0.7f);
 
-                GameObject deployButton = panel.transform.FindRecursive("DeployBttn-layout").gameObject;
-                deployButton.transform.position = new Vector3(1675, 175, deployButton.transform.position.z);
-
+                //Setup Lance Count
                 List<LanceLoadoutSlot> list = loadoutSlots.ToList();
+                //Remove already present lance slots
                 int addUnits = maxUnits - Settings.DEFAULT_MECH_SLOTS;
                 for (int i = 0; i < DropManagement.baysAlreadyAdded; i++)
                 {
@@ -169,19 +148,27 @@ namespace DropManagement
                     }
                     else
                     {
-                        Logger.M.TWL(0,"Error: index not found in UpdateSlotsCount: "+i.ToString());
+                        Logger.M.TWL(0, "Error: index not found in UpdateSlotsCount: " + i.ToString());
                     }
 
                 }
-                //list.Add(slot1.GetComponent<LanceLoadoutSlot>());
-                //list.Add(slot2.GetComponent<LanceLoadoutSlot>());
-                //list.Add(slot3.GetComponent<LanceLoadoutSlot>());
-                //list.Add(slot4.GetComponent<LanceLoadoutSlot>());
-                if (addUnits > 0) { list.Add(slot1.GetComponent<LanceLoadoutSlot>()); }
-                if (addUnits > 1) { list.Add(slot2.GetComponent<LanceLoadoutSlot>()); }
-                if (addUnits > 2) { list.Add(slot3.GetComponent<LanceLoadoutSlot>()); }
-                if (addUnits > 3) { list.Add(slot4.GetComponent<LanceLoadoutSlot>()); }
+
+                //Create a copy of the lanceslots control
+                var betaLayout = createNewLancePanel(primelayout, list, addUnits, "BetaLance");
                 loadoutSlots = list.ToArray<LanceLoadoutSlot>();
+                var charlieLayout = createNewLancePanel(primelayout,list, addUnits, "CharlieLance"); //TODO: add and handle the slots from Charlie lance
+
+                //shrink both slots to 70% and reposition
+                primelayout.transform.position = new Vector3(650, 315, primelayout.transform.position.z);
+                primelayout.transform.localScale = new Vector3(0.7f, 0.7f, 0.7f);
+                betaLayout.transform.position = new Vector3(650, 83, primelayout.transform.position.z);
+                betaLayout.transform.localScale = new Vector3(0.7f, 0.7f, 0.7f);
+                charlieLayout.transform.position = new Vector3(650, -149, primelayout.transform.position.z);
+                charlieLayout.transform.localScale = new Vector3(0.7f, 0.7f, 0.7f);
+
+                GameObject deployButton = panel.transform.FindRecursive("DeployBttn-layout").gameObject;
+                deployButton.transform.position = new Vector3(1675, 175, deployButton.transform.position.z);
+
                 AccessTools.Field(typeof(LanceConfiguratorPanel), "loadoutSlots").SetValue(panel, loadoutSlots);
 
                 float[] slotMaxTonnages = (float[])AccessTools.Field(typeof(LanceConfiguratorPanel), "slotMaxTonnages").GetValue(panel);
@@ -217,6 +204,32 @@ namespace DropManagement
                 Logger.M.TWL(0, e.ToString());
             }
         }
+
+        private static GameObject createNewLancePanel(GameObject primelayout, List<LanceLoadoutSlot> list, int addUnits, string lanceName)
+        {
+            GameObject newLayout = GameObject.Instantiate(primelayout);
+            newLayout.transform.parent = primelayout.transform.parent;
+            newLayout.name = lanceName;
+            GameObject slot1 = newLayout.transform.FindRecursive("lanceSlot1").gameObject;
+            GameObject slot2 = newLayout.transform.FindRecursive("lanceSlot2").gameObject;
+            GameObject slot3 = newLayout.transform.FindRecursive("lanceSlot3").gameObject;
+            GameObject slot4 = newLayout.transform.FindRecursive("lanceSlot4").gameObject;
+            primelayout.transform.FindRecursive("simbg").gameObject.SetActive(false);
+            newLayout.transform.FindRecursive("simbg").gameObject.SetActive(false);
+            newLayout.transform.FindRecursive("layout-lanceRating").gameObject.SetActive(false);
+            newLayout.transform.FindRecursive("lanceSlotHeader-Campaign").gameObject.SetActive(true);
+            newLayout.transform.FindRecursive("txt-unreadyLanceError").gameObject.SetActive(false);
+            TextMeshProUGUI aiText = newLayout.transform.FindRecursive("label-readyLanceHeading").gameObject.GetComponent<TextMeshProUGUI>();
+            aiText.text = DropManagement.settings.additionalLanceName;
+
+            if (addUnits > 0) { list.Add(slot1.GetComponent<LanceLoadoutSlot>()); }
+            if (addUnits > 1) { list.Add(slot2.GetComponent<LanceLoadoutSlot>()); }
+            if (addUnits > 2) { list.Add(slot3.GetComponent<LanceLoadoutSlot>()); }
+            if (addUnits > 3) { list.Add(slot4.GetComponent<LanceLoadoutSlot>()); }
+
+            return newLayout;
+        }
+
         static void Prefix(LanceConfiguratorPanel __instance, ref int maxUnits, Contract contract)
         {
             try
