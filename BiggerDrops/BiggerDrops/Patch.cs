@@ -128,13 +128,14 @@ namespace DropManagement
             try
             {
                 LanceLoadoutSlot[] loadoutSlots = (LanceLoadoutSlot[])AccessTools.Field(typeof(LanceConfiguratorPanel), "loadoutSlots").GetValue(panel);
+                
                 if (maxUnits <= loadoutSlots.Length)
                 {
                     Logger.M.TWL(1, "already fixed");
                     return;
                 };
                 GameObject primelayout = panel.transform.FindRecursive("uixPrfPanel_LC_LanceSlots-Widget-MANAGED").gameObject;
-
+                
                 //Setup Lance Count
                 List<LanceLoadoutSlot> list = loadoutSlots.ToList();
                 //Remove already present lance slots
@@ -159,12 +160,12 @@ namespace DropManagement
                 var charlieLayout = createNewLancePanel(primelayout,list, addUnits, "CharlieLance"); //TODO: add and handle the slots from Charlie lance
 
                 //shrink both slots to 70% and reposition
-                primelayout.transform.position = new Vector3(650, 315, primelayout.transform.position.z);
-                primelayout.transform.localScale = new Vector3(0.7f, 0.7f, 0.7f);
-                betaLayout.transform.position = new Vector3(650, 83, primelayout.transform.position.z);
-                betaLayout.transform.localScale = new Vector3(0.7f, 0.7f, 0.7f);
-                charlieLayout.transform.position = new Vector3(650, -149, primelayout.transform.position.z);
-                charlieLayout.transform.localScale = new Vector3(0.7f, 0.7f, 0.7f);
+                primelayout.transform.position = new Vector3(650, 395, primelayout.transform.position.z);
+                primelayout.transform.localScale = new Vector3(0.7f, 0.5f, 0.5f);
+                betaLayout.transform.position = new Vector3(650, 200, primelayout.transform.position.z);
+                betaLayout.transform.localScale = new Vector3(0.7f, 0.5f, 0.5f);
+                charlieLayout.transform.position = new Vector3(650, 55, primelayout.transform.position.z);
+                charlieLayout.transform.localScale = new Vector3(0.7f, 0.5f, 0.5f);
 
                 GameObject deployButton = panel.transform.FindRecursive("DeployBttn-layout").gameObject;
                 deployButton.transform.position = new Vector3(1675, 175, deployButton.transform.position.z);
