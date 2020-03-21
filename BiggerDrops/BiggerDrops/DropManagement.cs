@@ -5,16 +5,16 @@ using System.IO;
 using System.Reflection;
 using UnityEngine;
 
-namespace BiggerDrops
+namespace DropManagement
 {
-    public class BiggerDrops
+    public class DropManagement
     {
         internal static string ModDirectory;
         public static Settings settings;
         public static int baysAlreadyAdded = 0;
         public static void Init(string directory, string settingsJSON)
         {
-            BiggerDrops.ModDirectory = directory;
+            DropManagement.ModDirectory = directory;
             Logger.BaseDirectory = directory;
             try
             {
@@ -30,8 +30,7 @@ namespace BiggerDrops
             }
             try
             {
-                //var harmon = HarmonyI
-                var harmony = HarmonyInstance.Create("de.morphyum.BiggerDrops");
+                var harmony = HarmonyInstance.Create("en.CompanyCommander.DropManagement");
                 harmony.PatchAll(Assembly.GetExecutingAssembly());
                 ModDirectory = directory;
             }

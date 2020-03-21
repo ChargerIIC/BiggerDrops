@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 
-namespace BiggerDrops
+namespace DropManagement
 {
     public class SaveFields
     {
@@ -26,11 +26,11 @@ namespace BiggerDrops
             {
                 int unixTimestamp = (int)(saveTime.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
 
-                DirectoryInfo modsDir = Directory.GetParent(BiggerDrops.ModDirectory);
+                DirectoryInfo modsDir = Directory.GetParent(DropManagement.ModDirectory);
                 DirectoryInfo battletechDir = modsDir.Parent;
                 // We want to write to Battletech/ModSaves/PersistentMapClient directory
                 DirectoryInfo modSavesDir = battletechDir.CreateSubdirectory("ModSaves");
-                string filePath = battletechDir + "/ModSaves/BiggerDrops/" + instanceGUID + "-" + unixTimestamp + ".json";
+                string filePath = battletechDir + "/ModSaves/DropManagement/" + instanceGUID + "-" + unixTimestamp + ".json";
                 (new FileInfo(filePath)).Directory.Create();
                 using (StreamWriter writer = new StreamWriter(filePath, true))
                 {
@@ -50,9 +50,9 @@ namespace BiggerDrops
             try
             {
                 int unixTimestamp = (int)(saveTime.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
-                DirectoryInfo modsDir = Directory.GetParent(BiggerDrops.ModDirectory);
+                DirectoryInfo modsDir = Directory.GetParent(DropManagement.ModDirectory);
                 DirectoryInfo battletechDir = modsDir.Parent;
-                string filePath = battletechDir + "/ModSaves/BiggerDrops/" + instanceGUID + "-" + unixTimestamp + ".json";
+                string filePath = battletechDir + "/ModSaves/DropManagement/" + instanceGUID + "-" + unixTimestamp + ".json";
                 if (File.Exists(filePath))
                 {
                     using (StreamReader r = new StreamReader(filePath))

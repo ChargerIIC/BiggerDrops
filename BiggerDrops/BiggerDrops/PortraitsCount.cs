@@ -5,7 +5,7 @@ using System;
 using System.Reflection;
 using UnityEngine;
 
-namespace BiggerDrops
+namespace DropManagement
 {
     /*[HarmonyPatch(typeof(PathNodeGrid))]
     [HarmonyPatch("ResetPathGrid")]
@@ -113,7 +113,7 @@ namespace BiggerDrops
         public static bool Prefix(CombatHUDMechwarriorTray __instance, CombatGameState Combat, CombatHUD HUD)
         {
             Logger.M.TWL(0, "CombatHUDMechwarriorTray.Init prefix");
-            if (BiggerDrops.settings.additinalPlayerMechSlots == 0)
+            if (DropManagement.settings.additinalPlayerMechSlots == 0)
             {
                 Logger.M.WL(1, "no additional portraits needed");
                 return true;

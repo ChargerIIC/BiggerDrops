@@ -67,7 +67,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BiggerDrops.cs" />
+    <Compile Include="DropManagement.cs" />
     <Compile Include="Helper.cs" />
     <Compile Include="HolderClasses.cs" />
     <Compile Include="Logger.cs" />
@@ -81,6 +81,9 @@
       <SubType>Designer</SubType>
     </None>
     <AdditionalFiles Include="ModDeploy\settings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </AdditionalFiles>
+    <AdditionalFiles Include="ModDeploy\mod.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </AdditionalFiles>
     <None Include="packages.config" />

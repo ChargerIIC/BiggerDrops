@@ -2,16 +2,16 @@
 using System.Collections.Generic;
 using BattleTech;
 
-namespace BiggerDrops
+namespace DropManagement
 {
     public class Settings
     {
         public static readonly int MAX_ADDITINAL_MECH_SLOTS = 4; //How many slots (locked or unlocked) are available
         public static readonly int DEFAULT_MECH_SLOTS = 4; //Number of slots already in the nonmodded game. Currently 4
         public static readonly string EMPLOYER_LANCE_GUID = "ecc8d4f2-74b4-465d-adf6-84445e5dfc230";
-        public static readonly string ADDITIONAL_MECH_STAT = "BiggerDrops_AdditionalMechSlots";
-        public static readonly string ADDITIONAL_PLAYER_MECH_STAT = "BiggerDrops_AdditionalPlayerMechSlots";
-        public static readonly string MAX_TONNAGE_STAT = "BiggerDrops_MaxTonnage";
+        public static readonly string ADDITIONAL_MECH_STAT = "DropManagement_AdditionalMechSlots";
+        public static readonly string ADDITIONAL_PLAYER_MECH_STAT = "DropManagement_AdditionalPlayerMechSlots";
+        public static readonly string MAX_TONNAGE_STAT = "DropManagement_MaxTonnage";
         public bool debugLog { get; set; }
         public int skirmishMax { get; set; }
         public string additionalLanceName { get; set; }

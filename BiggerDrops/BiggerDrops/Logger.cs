@@ -4,7 +4,7 @@ using System.IO;
 using System.Text;
 using System.Threading;
 
-namespace BiggerDrops
+namespace DropManagement
 {
     public enum LogFileType
     {
@@ -114,12 +114,12 @@ namespace BiggerDrops
         public static void InitLog()
         {
             //LogFile file = new LogFile("CAC_main_log.txt", CustomAmmoCategories.Settings.debugLog);
-            Logger.logs.Add(LogFileType.Main, new LogFile("ELog.txt", BiggerDrops.settings.debugLog));
+            Logger.logs.Add(LogFileType.Main, new LogFile("ELog.txt", DropManagement.settings.debugLog));
             //Log.logs.Add(LogFileType.Main, null);
             Logger.flushThread.Start();
         }
 
-        static string filePath = $"{BiggerDrops.ModDirectory}/Log.txt";
+        static string filePath = $"{DropManagement.ModDirectory}/Log.txt";
         public static void LogError(Exception ex)
         {
             Logger.M.WL("Message :" + ex.Message + "<br/>" + Environment.NewLine + "StackTrace :" + ex.StackTrace + "" + Environment.NewLine + "Date :" + DateTime.Now.ToString(), true);

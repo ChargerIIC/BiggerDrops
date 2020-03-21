@@ -11,7 +11,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using SVGImporter;
 
-namespace BiggerDrops
+namespace DropManagement
 {
 
     [HarmonyPatch(typeof(GameInstanceSave), MethodType.Constructor)]
@@ -37,8 +37,8 @@ namespace BiggerDrops
     {
         static void Postfix(SGCmdCenterLanceConfigBG __instance)
         {
-            BiggerDrops.baysAlreadyAdded = 0;
-            __instance.LC.UpdateSlotsCount(Settings.MAX_ADDITINAL_MECH_SLOTS + BiggerDrops.settings.additinalMechSlots);
+            DropManagement.baysAlreadyAdded = 0;
+            __instance.LC.UpdateSlotsCount(Settings.MAX_ADDITINAL_MECH_SLOTS + DropManagement.settings.additinalMechSlots);
         }
     }
     [HarmonyPatch(typeof(LancePreviewPanel), "SaveLance")]
@@ -148,7 +148,7 @@ namespace BiggerDrops
                 newLayout.transform.FindRecursive("lanceSlotHeader-Campaign").gameObject.SetActive(true);
                 newLayout.transform.FindRecursive("txt-unreadyLanceError").gameObject.SetActive(false);
                 TextMeshProUGUI aiText = newLayout.transform.FindRecursive("label-readyLanceHeading").gameObject.GetComponent<TextMeshProUGUI>();
-                aiText.text = BiggerDrops.settings.additionalLanceName;
+                aiText.text = DropManagement.settings.additionalLanceName;
                 //shrink both slots to 70% and reposition
                 primelayout.transform.position = new Vector3(650, 315, primelayout.transform.position.z);
                 primelayout.transform.localScale = new Vector3(0.7f, 0.7f, 0.7f);
@@ -160,7 +160,7 @@ namespace BiggerDrops
 
                 List<LanceLoadoutSlot> list = loadoutSlots.ToList();
                 int addUnits = maxUnits - Settings.DEFAULT_MECH_SLOTS;
-                for (int i = 0; i < BiggerDrops.baysAlreadyAdded; i++)
+                for (int i = 0; i < DropManagement.baysAlreadyAdded; i++)
                 {
                     var slotNum = Settings.DEFAULT_MECH_SLOTS + i;
                     if (list[slotNum])
@@ -189,10 +189,10 @@ namespace BiggerDrops
                 List<float> listMaxTonnages = slotMaxTonnages.ToList();
                 List<float> listMinTonnages = slotMinTonnages.ToList();
 
-                //Logger.M.TWL(0, string.Format("Debug BiigerDrops.baysAlreadAdded: {0}", BiggerDrops.baysAlreadyAdded), true);
+                //Logger.M.TWL(0, string.Format("Debug BiigerDrops.baysAlreadAdded: {0}", DropManagement.baysAlreadyAdded), true);
                 //Logger.M.TWL(0, string.Format("Debug Settings.DEFAULT_MECH_SLOTS: {0}", Settings.DEFAULT_MECH_SLOTS), true);
 
-                for (int i = 0; i < BiggerDrops.baysAlreadyAdded; i++)
+                for (int i = 0; i < DropManagement.baysAlreadyAdded; i++)
                 {
                     listMaxTonnages.RemoveAt(Settings.DEFAULT_MECH_SLOTS + i);
                     listMinTonnages.RemoveAt(Settings.DEFAULT_MECH_SLOTS + i);
@@ -209,7 +209,7 @@ namespace BiggerDrops
                 slotMinTonnages = listMinTonnages.ToArray<float>();
                 AccessTools.Field(typeof(LanceConfiguratorPanel), "slotMaxTonnages").SetValue(panel, slotMaxTonnages);
                 AccessTools.Field(typeof(LanceConfiguratorPanel), "slotMinTonnages").SetValue(panel, slotMinTonnages);
-                BiggerDrops.baysAlreadyAdded = addUnits;
+                DropManagement.baysAlreadyAdded = addUnits;
                 Logger.M.TWL(0, "Skirmish UI fixed");
             }
             catch (Exception e)
@@ -223,7 +223,7 @@ namespace BiggerDrops
             {
                 if (contract != null)
                 {
-                    maxUnits = Settings.MAX_ADDITINAL_MECH_SLOTS + BiggerDrops.settings.additinalMechSlots;
+                    maxUnits = Settings.MAX_ADDITINAL_MECH_SLOTS + DropManagement.settings.additinalMechSlots;
                     __instance.UpdateSlotsCount(maxUnits);
                     if (contract.Override != null)
                     {
@@ -236,7 +236,7 @@ namespace BiggerDrops
                 else
                 {
                     maxUnits = Settings.MAX_ADDITINAL_MECH_SLOTS + Settings.MAX_ADDITINAL_MECH_SLOTS;
-                    BiggerDrops.baysAlreadyAdded = 0;
+                    DropManagement.baysAlreadyAdded = 0;
                     __instance.UpdateSlotsCount(maxUnits);
                     //SkirmishUIFix(__instance,maxUnits);
                 }
@@ -255,13 +255,13 @@ namespace BiggerDrops
                 if (contract == null)
                 {
                     Logger.M.WL(1, "contract is null");
-                    //__instance.lanceMaxTonnage = BiggerDrops.settings.defaultMaxTonnage;
+                    //__instance.lanceMaxTonnage = DropManagement.settings.defaultMaxTonnage;
                     return;
                 }
                 else
                 if (contract.Override.lanceMaxTonnage == -1)
                 {
-                    __instance.lanceMaxTonnage = BiggerDrops.settings.defaultMaxTonnage;
+                    __instance.lanceMaxTonnage = DropManagement.settings.defaultMaxTonnage;
                 }
             }
             catch (Exception e)
@@ -462,9 +462,9 @@ namespace BiggerDrops
                         }
                         else
                         {
-                            //if (i >= BiggerDrops.settings.additinalMechSlots + Settings.DEFAULT_MECH_SLOTS) { break; }
-                            Logger.M.TWL(0, "LanceConfiguratorPanel.CreateLanceConfiguration. Index:" + i + " additional slots border:" + (BiggerDrops.settings.additinalMechSlots + Settings.DEFAULT_MECH_SLOTS) + " player slots border:" + (BiggerDrops.settings.additinalPlayerMechSlots + Settings.DEFAULT_MECH_SLOTS));
-                            if (i >= BiggerDrops.settings.additinalPlayerMechSlots + Settings.DEFAULT_MECH_SLOTS)
+                            //if (i >= DropManagement.settings.additinalMechSlots + Settings.DEFAULT_MECH_SLOTS) { break; }
+                            Logger.M.TWL(0, "LanceConfiguratorPanel.CreateLanceConfiguration. Index:" + i + " additional slots border:" + (DropManagement.settings.additinalMechSlots + Settings.DEFAULT_MECH_SLOTS) + " player slots border:" + (DropManagement.settings.additinalPlayerMechSlots + Settings.DEFAULT_MECH_SLOTS));
+                            if (i >= DropManagement.settings.additinalPlayerMechSlots + Settings.DEFAULT_MECH_SLOTS)
                             {
                                 Fields.callsigns.Add(pilotDef.Description.Callsign);
                                 //EMPLOYER ID
@@ -493,9 +493,9 @@ namespace BiggerDrops
     {
         public static void Postfix(SimGameState __instance, GameInstanceSave gameInstanceSave)
         {
-            if (BiggerDrops.settings.allowUpgrades)
+            if (DropManagement.settings.allowUpgrades)
             {
-                BiggerDrops.settings.setCompanyStats(__instance.CompanyStats);
+                DropManagement.settings.setCompanyStats(__instance.CompanyStats);
             }
         }
     }
@@ -505,9 +505,9 @@ namespace BiggerDrops
     {
         public static void Postfix(SimGameState __instance)
         {
-            if (BiggerDrops.settings.allowUpgrades)
+            if (DropManagement.settings.allowUpgrades)
             {
-                BiggerDrops.settings.setCompanyStats(__instance.CompanyStats);
+                DropManagement.settings.setCompanyStats(__instance.CompanyStats);
             }
         }
     }
