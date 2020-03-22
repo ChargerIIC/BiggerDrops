@@ -165,7 +165,7 @@ namespace DropManagement
                 if (addUnits > 4)
                 {
                     var charlieLayout = createNewLancePanel(primelayout, list, addUnits, "CharlieLance"); //TODO: add and handle the slots from Charlie lance
-                    aiText = betaLayout.transform.FindRecursive("label-readyLanceHeading").gameObject.GetComponent<TextMeshProUGUI>();
+                    aiText = charlieLayout.transform.FindRecursive("label-readyLanceHeading").gameObject.GetComponent<TextMeshProUGUI>();
                     aiText.text = DropManagement.settings.thirdLanceName;
                     charlieLayout.transform.position = new Vector3(650, 55, primelayout.transform.position.z);
                     charlieLayout.transform.localScale = new Vector3(0.7f, 0.5f, 0.5f);
