@@ -495,7 +495,7 @@ namespace DropManagement
                         {
                             //if (i >= DropManagement.settings.additinalMechSlots + Settings.DEFAULT_MECH_SLOTS) { break; }
                             Logger.M.TWL(0, "LanceConfiguratorPanel.CreateLanceConfiguration. Index:" + i + " additional slots border:" + (DropManagement.settings.additinalMechSlots + Settings.DEFAULT_MECH_SLOTS) + " player slots border:" + (DropManagement.settings.additinalPlayerMechSlots + Settings.DEFAULT_MECH_SLOTS));
-                            if (i >= DropManagement.settings.additinalPlayerMechSlots + Settings.DEFAULT_MECH_SLOTS)
+                            if (i >= 12) //mechs beyond the 12 slots are contracted mechs
                             {
                                 Fields.callsigns.Add(pilotDef.Description.Callsign);
                                 //EMPLOYER ID
