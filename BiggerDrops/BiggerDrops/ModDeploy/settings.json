@@ -1,8 +1,9 @@
 {
   "debugLog": true,
-  "additionalLanceName": "BETA LANCE",
-  "additinalMechSlots": 4,
-  "additinalPlayerMechSlots": 4,
+  "secondLanceName": "BETA LANCE",
+  "thirdLanceName": "CHARLIE LANCE",
+  "additinalMechSlots": 6,
+  "additinalPlayerMechSlots": 6,
   "defaultMaxTonnage": 800,
   "allowUpgrades" : false,
   "argoUpgradeName" : "Command & Control",

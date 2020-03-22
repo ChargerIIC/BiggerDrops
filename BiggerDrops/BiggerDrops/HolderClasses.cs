@@ -6,7 +6,7 @@ namespace DropManagement
 {
     public class Settings
     {
-        public static readonly int MAX_ADDITINAL_MECH_SLOTS = 4; //How many slots (locked or unlocked) are available
+        public static readonly int MAX_ADDITINAL_MECH_SLOTS = 8; //How many slots (locked or unlocked) are available
         public static readonly int DEFAULT_MECH_SLOTS = 4; //Number of slots already in the nonmodded game. Currently 4
         public static readonly string EMPLOYER_LANCE_GUID = "ecc8d4f2-74b4-465d-adf6-84445e5dfc230";
         public static readonly string ADDITIONAL_MECH_STAT = "DropManagement_AdditionalMechSlots";
@@ -14,7 +14,8 @@ namespace DropManagement
         public static readonly string MAX_TONNAGE_STAT = "DropManagement_MaxTonnage";
         public bool debugLog { get; set; }
         public int skirmishMax { get; set; }
-        public string additionalLanceName { get; set; }
+        public string secondLanceName { get; set; }
+        public string thirdLanceName { get; set; }
         public bool allowUpgrades { get; set; }
         public int additinalMechSlots
         {
@@ -93,7 +94,8 @@ namespace DropManagement
             debugLog = false;
             FadditinalMechSlots = -1;
             FadditinalPlayerMechSlots = -1;
-            additionalLanceName = "AI LANCE";
+            secondLanceName = "SECOND LANCE";
+            thirdLanceName = "THIRD LANCE";
             FmaxTonnage = 500;
             allowUpgrades = false;
         }

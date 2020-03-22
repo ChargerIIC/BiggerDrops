@@ -127,6 +127,7 @@ namespace DropManagement
             Logger.M.TWL(0, "LanceConfiguratorPanel.UpdateSlotsCount " + maxUnits);
             try
             {
+                Logger.M.TWL(0, "maxUnits: " + maxUnits);
                 LanceLoadoutSlot[] loadoutSlots = (LanceLoadoutSlot[])AccessTools.Field(typeof(LanceConfiguratorPanel), "loadoutSlots").GetValue(panel);
                 
                 if (maxUnits <= loadoutSlots.Length)
@@ -140,6 +141,8 @@ namespace DropManagement
                 List<LanceLoadoutSlot> list = loadoutSlots.ToList();
                 //Remove already present lance slots
                 int addUnits = maxUnits - Settings.DEFAULT_MECH_SLOTS;
+                Logger.M.TWL(0, "addUnits: " + addUnits);
+
                 for (int i = 0; i < DropManagement.baysAlreadyAdded; i++)
                 {
                     var slotNum = Settings.DEFAULT_MECH_SLOTS + i;
@@ -156,16 +159,24 @@ namespace DropManagement
 
                 //Create a copy of the lanceslots control
                 var betaLayout = createNewLancePanel(primelayout, list, addUnits, "BetaLance");
+                TextMeshProUGUI aiText = betaLayout.transform.FindRecursive("label-readyLanceHeading").gameObject.GetComponent<TextMeshProUGUI>();
+                aiText.text = DropManagement.settings.secondLanceName;
+
+                if (addUnits > 4)
+                {
+                    var charlieLayout = createNewLancePanel(primelayout, list, addUnits, "CharlieLance"); //TODO: add and handle the slots from Charlie lance
+                    aiText = betaLayout.transform.FindRecursive("label-readyLanceHeading").gameObject.GetComponent<TextMeshProUGUI>();
+                    aiText.text = DropManagement.settings.thirdLanceName;
+                    charlieLayout.transform.position = new Vector3(650, 55, primelayout.transform.position.z);
+                    charlieLayout.transform.localScale = new Vector3(0.7f, 0.5f, 0.5f);
+                }
                 loadoutSlots = list.ToArray<LanceLoadoutSlot>();
-                var charlieLayout = createNewLancePanel(primelayout,list, addUnits, "CharlieLance"); //TODO: add and handle the slots from Charlie lance
 
                 //shrink both slots to 70% and reposition
                 primelayout.transform.position = new Vector3(650, 395, primelayout.transform.position.z);
                 primelayout.transform.localScale = new Vector3(0.7f, 0.5f, 0.5f);
                 betaLayout.transform.position = new Vector3(650, 200, primelayout.transform.position.z);
                 betaLayout.transform.localScale = new Vector3(0.7f, 0.5f, 0.5f);
-                charlieLayout.transform.position = new Vector3(650, 55, primelayout.transform.position.z);
-                charlieLayout.transform.localScale = new Vector3(0.7f, 0.5f, 0.5f);
 
                 GameObject deployButton = panel.transform.FindRecursive("DeployBttn-layout").gameObject;
                 deployButton.transform.position = new Vector3(1675, 175, deployButton.transform.position.z);
@@ -189,10 +200,18 @@ namespace DropManagement
                 if (addUnits > 1) { listMaxTonnages.Add(-1); }
                 if (addUnits > 2) { listMaxTonnages.Add(-1); }
                 if (addUnits > 3) { listMaxTonnages.Add(-1); }
+                if (addUnits > 4) { listMaxTonnages.Add(-1); }
+                if (addUnits > 5) { listMaxTonnages.Add(-1); }
+                if (addUnits > 6) { listMaxTonnages.Add(-1); }
+                if (addUnits > 7) { listMaxTonnages.Add(-1); }
                 if (addUnits > 0) { listMinTonnages.Add(-1); }
                 if (addUnits > 1) { listMinTonnages.Add(-1); }
                 if (addUnits > 2) { listMinTonnages.Add(-1); }
                 if (addUnits > 3) { listMinTonnages.Add(-1); }
+                if (addUnits > 4) { listMinTonnages.Add(-1); }
+                if (addUnits > 5) { listMinTonnages.Add(-1); }
+                if (addUnits > 6) { listMinTonnages.Add(-1); }
+                if (addUnits > 7) { listMinTonnages.Add(-1); }
                 slotMaxTonnages = listMaxTonnages.ToArray<float>();
                 slotMinTonnages = listMinTonnages.ToArray<float>();
                 AccessTools.Field(typeof(LanceConfiguratorPanel), "slotMaxTonnages").SetValue(panel, slotMaxTonnages);
@@ -209,7 +228,7 @@ namespace DropManagement
         private static GameObject createNewLancePanel(GameObject primelayout, List<LanceLoadoutSlot> list, int addUnits, string lanceName)
         {
             GameObject newLayout = GameObject.Instantiate(primelayout);
-            newLayout.transform.parent = primelayout.transform.parent;
+            newLayout.transform.SetParent(primelayout.transform.parent);
             newLayout.name = lanceName;
             GameObject slot1 = newLayout.transform.FindRecursive("lanceSlot1").gameObject;
             GameObject slot2 = newLayout.transform.FindRecursive("lanceSlot2").gameObject;
@@ -220,13 +239,11 @@ namespace DropManagement
             newLayout.transform.FindRecursive("layout-lanceRating").gameObject.SetActive(false);
             newLayout.transform.FindRecursive("lanceSlotHeader-Campaign").gameObject.SetActive(true);
             newLayout.transform.FindRecursive("txt-unreadyLanceError").gameObject.SetActive(false);
-            TextMeshProUGUI aiText = newLayout.transform.FindRecursive("label-readyLanceHeading").gameObject.GetComponent<TextMeshProUGUI>();
-            aiText.text = DropManagement.settings.additionalLanceName;
 
-            if (addUnits > 0) { list.Add(slot1.GetComponent<LanceLoadoutSlot>()); }
-            if (addUnits > 1) { list.Add(slot2.GetComponent<LanceLoadoutSlot>()); }
-            if (addUnits > 2) { list.Add(slot3.GetComponent<LanceLoadoutSlot>()); }
-            if (addUnits > 3) { list.Add(slot4.GetComponent<LanceLoadoutSlot>()); }
+            list.Add(slot1.GetComponent<LanceLoadoutSlot>()); 
+            list.Add(slot2.GetComponent<LanceLoadoutSlot>()); 
+            list.Add(slot3.GetComponent<LanceLoadoutSlot>()); 
+            list.Add(slot4.GetComponent<LanceLoadoutSlot>());
 
             return newLayout;
         }
