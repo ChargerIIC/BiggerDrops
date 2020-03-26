@@ -386,7 +386,7 @@ namespace DropManagement
                 AccessTools.Field(typeof(AAR_UnitsResult_Screen), "UnitWidgets").SetValue(__instance, UnitWidgets);
 
                 List<UnitResult> UnitResults = new List<UnitResult>();
-                for (int i = 0; i < 8; i++)
+                for (int i = 0; i < 12; i++)
                 {
                     if (i < contract.PlayerUnitResults.Count)
                     {
