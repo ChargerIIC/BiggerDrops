@@ -370,7 +370,7 @@ namespace DropManagement
                 nextButton.transform.localPosition = new Vector3(150, 400, 0);
 
                 Transform parent = UnitWidgets[0].transform.parent;
-                parent.localPosition = new Vector3(0, 115, 0);
+                parent.localPosition = new Vector3(0, 110, 0);
                 foreach (AAR_UnitStatusWidget oldWidget in UnitWidgets)
                 {
                     oldWidget.transform.localScale = new Vector3(0.7f, 0.7f, 0.7f);
@@ -379,22 +379,21 @@ namespace DropManagement
                 GameObject newparent = GameObject.Instantiate(parent.gameObject);
                 newparent.transform.parent = parent.parent;
                 newparent.name = "newparent";
-                newparent.transform.localPosition = new Vector3(0, -325, 0);
-
-                GameObject thirdparent = GameObject.Instantiate(parent.gameObject);
-                thirdparent.transform.parent = parent.parent;
-                thirdparent.name = "thirdparent";
-                thirdparent.transform.localPosition = new Vector3(0, -325, 0);
-
+                newparent.transform.localPosition = new Vector3(0, -320, 0);
                 foreach (Transform t in newparent.transform)
                 {
                     UnitWidgets.Add(t.gameObject.GetComponent<AAR_UnitStatusWidget>());
                 }
 
+                GameObject thirdparent = GameObject.Instantiate(parent.gameObject);
+                thirdparent.transform.parent = parent.parent;
+                thirdparent.name = "thirdparent";
+                thirdparent.transform.localPosition = new Vector3(0, -760, 0);
                 foreach (Transform t in thirdparent.transform)
                 {
                     UnitWidgets.Add(t.gameObject.GetComponent<AAR_UnitStatusWidget>());
                 }
+
                 AccessTools.Field(typeof(AAR_UnitsResult_Screen), "UnitWidgets").SetValue(__instance, UnitWidgets);
 
                 List<UnitResult> UnitResults = new List<UnitResult>();
@@ -404,21 +403,21 @@ namespace DropManagement
                     {
                         UnitResults.Add(contract.PlayerUnitResults[i]);
                     }
-                    //else
-                    //{
-                    //    UnitResults.Add(null);
-                    //}
+                    else
+                    {
+                        UnitResults.Add(null);
+                    }
                 }
-                Logger.M.TWL(0, sim.ToString());
-                Logger.M.TWL(0, sim.CompanyName);
-                Logger.M.TWL(0, mission.ToString());
-                Logger.M.TWL(0, mission.name);
-                Logger.M.TWL(0, contract.ToString());
-                Logger.M.TWL(0, contract.Name);
-                contract.PlayerUnitResults.ForEach(u=> Logger.M.TWL(0, u.mech.Name));
-                Logger.M.TWL(0, contract.PlayerUnitResults.Count.ToString());
-                UnitResults.ForEach(u=> Logger.M.TWL(0, u.mech.Name));
-                Logger.M.TWL(0, UnitResults.Count.ToString());
+                //Logger.M.TWL(0, sim.ToString());
+                //Logger.M.TWL(0, sim.CompanyName);
+                //Logger.M.TWL(0, mission.ToString());
+                //Logger.M.TWL(0, mission.name);
+                //Logger.M.TWL(0, contract.ToString());
+                //Logger.M.TWL(0, contract.Name);
+                //contract.PlayerUnitResults.ForEach(u=> Logger.M.TWL(0, u.mech.Name));
+                //Logger.M.TWL(0, contract.PlayerUnitResults.Count.ToString());
+                //UnitResults.ForEach(u=> Logger.M.TWL(0, u.mech.Name));
+                //Logger.M.TWL(0, UnitResults.Count.ToString());
 
                 AccessTools.Field(typeof(AAR_UnitsResult_Screen), "simState").SetValue(__instance, sim);
                 AccessTools.Field(typeof(AAR_UnitsResult_Screen), "missionResultParent").SetValue(__instance, mission);
@@ -448,7 +447,7 @@ namespace DropManagement
                 List<AAR_UnitStatusWidget> UnitWidgets = (List<AAR_UnitStatusWidget>)AccessTools.Field(typeof(AAR_UnitsResult_Screen), "UnitWidgets").GetValue(__instance);
                 List<UnitResult> UnitResults = (List<UnitResult>)AccessTools.Field(typeof(AAR_UnitsResult_Screen), "UnitResults").GetValue(__instance);
                 int experienceEarned = theContract.ExperienceEarned;
-                for (int i = 0; i < 8; i++)
+                for (int i = 0; i < 12; i++)
                 {
                     UnitWidgets[i].SetMechIconValueTextActive(false);
                     if (UnitResults[i] != null)
