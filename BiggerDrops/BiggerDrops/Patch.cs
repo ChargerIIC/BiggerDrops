@@ -375,11 +375,23 @@ namespace DropManagement
                 {
                     oldWidget.transform.localScale = new Vector3(0.7f, 0.7f, 0.7f);
                 }
+
                 GameObject newparent = GameObject.Instantiate(parent.gameObject);
                 newparent.transform.parent = parent.parent;
                 newparent.name = "newparent";
                 newparent.transform.localPosition = new Vector3(0, -325, 0);
+
+                GameObject thirdparent = GameObject.Instantiate(parent.gameObject);
+                thirdparent.transform.parent = parent.parent;
+                thirdparent.name = "thirdparent";
+                thirdparent.transform.localPosition = new Vector3(0, -325, 0);
+
                 foreach (Transform t in newparent.transform)
+                {
+                    UnitWidgets.Add(t.gameObject.GetComponent<AAR_UnitStatusWidget>());
+                }
+
+                foreach (Transform t in thirdparent.transform)
                 {
                     UnitWidgets.Add(t.gameObject.GetComponent<AAR_UnitStatusWidget>());
                 }
@@ -392,11 +404,22 @@ namespace DropManagement
                     {
                         UnitResults.Add(contract.PlayerUnitResults[i]);
                     }
-                    else
-                    {
-                        UnitResults.Add(null);
-                    }
+                    //else
+                    //{
+                    //    UnitResults.Add(null);
+                    //}
                 }
+                Logger.M.TWL(0, sim.ToString());
+                Logger.M.TWL(0, sim.CompanyName);
+                Logger.M.TWL(0, mission.ToString());
+                Logger.M.TWL(0, mission.name);
+                Logger.M.TWL(0, contract.ToString());
+                Logger.M.TWL(0, contract.Name);
+                contract.PlayerUnitResults.ForEach(u=> Logger.M.TWL(0, u.mech.Name));
+                Logger.M.TWL(0, contract.PlayerUnitResults.Count.ToString());
+                UnitResults.ForEach(u=> Logger.M.TWL(0, u.mech.Name));
+                Logger.M.TWL(0, UnitResults.Count.ToString());
+
                 AccessTools.Field(typeof(AAR_UnitsResult_Screen), "simState").SetValue(__instance, sim);
                 AccessTools.Field(typeof(AAR_UnitsResult_Screen), "missionResultParent").SetValue(__instance, mission);
                 AccessTools.Field(typeof(AAR_UnitsResult_Screen), "theContract").SetValue(__instance, contract);
