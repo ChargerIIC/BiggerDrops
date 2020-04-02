@@ -10,6 +10,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
 using SVGImporter;
+using UnityEngine.UI;
 
 namespace DropManagement
 {
@@ -127,6 +128,7 @@ namespace DropManagement
             Logger.M.TWL(0, "LanceConfiguratorPanel.UpdateSlotsCount " + maxUnits);
             try
             {
+                var scrollRect = panel.gameObject.AddComponent<ScrollRect>();
                 Logger.M.TWL(0, "maxUnits: " + maxUnits);
                 LanceLoadoutSlot[] loadoutSlots = (LanceLoadoutSlot[])AccessTools.Field(typeof(LanceConfiguratorPanel), "loadoutSlots").GetValue(panel);
                 
@@ -161,10 +163,11 @@ namespace DropManagement
                 var betaLayout = createNewLancePanel(primelayout, list, addUnits, "BetaLance");
                 TextMeshProUGUI aiText = betaLayout.transform.FindRecursive("label-readyLanceHeading").gameObject.GetComponent<TextMeshProUGUI>();
                 aiText.text = DropManagement.settings.secondLanceName;
+                GameObject charlieLayout = null;
 
                 if (addUnits > 4)
                 {
-                    var charlieLayout = createNewLancePanel(primelayout, list, addUnits, "CharlieLance"); //TODO: add and handle the slots from Charlie lance
+                    charlieLayout = createNewLancePanel(primelayout, list, addUnits, "CharlieLance"); //TODO: add and handle the slots from Charlie lance
                     aiText = charlieLayout.transform.FindRecursive("label-readyLanceHeading").gameObject.GetComponent<TextMeshProUGUI>();
                     aiText.text = DropManagement.settings.thirdLanceName;
                     charlieLayout.transform.position = new Vector3(650, 55, primelayout.transform.position.z);
@@ -177,7 +180,24 @@ namespace DropManagement
                 primelayout.transform.localScale = new Vector3(0.7f, 0.5f, 0.5f);
                 betaLayout.transform.position = new Vector3(650, 200, primelayout.transform.position.z);
                 betaLayout.transform.localScale = new Vector3(0.7f, 0.5f, 0.5f);
+                var content = new GameObject("content", new[] { typeof(ContentSizeFitter), typeof(RectTransform) });
 
+                content.transform.position = new Vector3(650, 395, primelayout.transform.position.z);
+                var contentTransform = content.GetComponent<RectTransform>();
+                contentTransform.SetParent(primelayout.transform.parent, false);
+                contentTransform.sizeDelta = new Vector2(600, 450);
+                //contentTransform.SetPositionAndRotation(new Vector3(650, 395, primelayout.transform.position.z), Quaternion.identity);
+                contentTransform.SetPositionAndRotation(new Vector3(950,600, primelayout.transform.position.z), Quaternion.identity);
+                //contentTransform.rect = new Rect(new Vector2(650, 395), new Vector2(600, 400));
+                var contnetFitter = content.GetComponent<ContentSizeFitter>();
+                contnetFitter.verticalFit = ContentSizeFitter.FitMode.Unconstrained;
+                scrollRect.content = contentTransform;
+                primelayout.transform.SetParent(contentTransform, true);
+                betaLayout.transform.SetParent(contentTransform, true);
+                if (charlieLayout !=null)
+                {
+                    charlieLayout.transform.SetParent(contentTransform, true);
+                }
                 GameObject deployButton = panel.transform.FindRecursive("DeployBttn-layout").gameObject;
                 deployButton.transform.position = new Vector3(1675, 175, deployButton.transform.position.z);
 
