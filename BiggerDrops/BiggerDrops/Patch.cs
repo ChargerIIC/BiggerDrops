@@ -165,12 +165,27 @@ namespace DropManagement
                 aiText.text = DropManagement.settings.secondLanceName;
                 GameObject charlieLayout = null;
 
+                var content = new GameObject("content", new[] { typeof(ContentSizeFitter), typeof(RectTransform) });
+
+                content.transform.position = new Vector3(650, 395, primelayout.transform.position.z);
+                var contentTransform = content.GetComponent<RectTransform>();
+                contentTransform.SetParent(primelayout.transform.parent, false);
+                contentTransform.sizeDelta = new Vector2(600, 450);
+                //contentTransform.SetPositionAndRotation(new Vector3(650, 395, primelayout.transform.position.z), Quaternion.identity);
+                contentTransform.SetPositionAndRotation(new Vector3(950, 600, primelayout.transform.position.z), Quaternion.identity);
+                //contentTransform.rect = new Rect(new Vector2(650, 395), new Vector2(600, 400));
+                var contnetFitter = content.GetComponent<ContentSizeFitter>();
+                contnetFitter.verticalFit = ContentSizeFitter.FitMode.Unconstrained;
+                scrollRect.content = contentTransform;
+                primelayout.transform.SetParent(contentTransform, true);
+                betaLayout.transform.SetParent(contentTransform, true);
+
                 if (addUnits > 4)
                 {
                     charlieLayout = createNewLancePanel(primelayout, list, addUnits, "CharlieLance"); //TODO: add and handle the slots from Charlie lance
                     aiText = charlieLayout.transform.FindRecursive("label-readyLanceHeading").gameObject.GetComponent<TextMeshProUGUI>();
                     aiText.text = DropManagement.settings.thirdLanceName;
-                    charlieLayout.transform.position = new Vector3(650, 55, primelayout.transform.position.z);
+                    charlieLayout.transform.position = new Vector3(650, 50, primelayout.transform.position.z);
                     charlieLayout.transform.localScale = new Vector3(0.7f, 0.5f, 0.5f);
                 }
                 loadoutSlots = list.ToArray<LanceLoadoutSlot>();
@@ -180,20 +195,7 @@ namespace DropManagement
                 primelayout.transform.localScale = new Vector3(0.7f, 0.5f, 0.5f);
                 betaLayout.transform.position = new Vector3(650, 200, primelayout.transform.position.z);
                 betaLayout.transform.localScale = new Vector3(0.7f, 0.5f, 0.5f);
-                var content = new GameObject("content", new[] { typeof(ContentSizeFitter), typeof(RectTransform) });
-
-                content.transform.position = new Vector3(650, 395, primelayout.transform.position.z);
-                var contentTransform = content.GetComponent<RectTransform>();
-                contentTransform.SetParent(primelayout.transform.parent, false);
-                contentTransform.sizeDelta = new Vector2(600, 450);
-                //contentTransform.SetPositionAndRotation(new Vector3(650, 395, primelayout.transform.position.z), Quaternion.identity);
-                contentTransform.SetPositionAndRotation(new Vector3(950,600, primelayout.transform.position.z), Quaternion.identity);
-                //contentTransform.rect = new Rect(new Vector2(650, 395), new Vector2(600, 400));
-                var contnetFitter = content.GetComponent<ContentSizeFitter>();
-                contnetFitter.verticalFit = ContentSizeFitter.FitMode.Unconstrained;
-                scrollRect.content = contentTransform;
-                primelayout.transform.SetParent(contentTransform, true);
-                betaLayout.transform.SetParent(contentTransform, true);
+               
                 if (charlieLayout !=null)
                 {
                     charlieLayout.transform.SetParent(contentTransform, true);
