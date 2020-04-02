@@ -1,0 +1,10 @@
+Company Commander contains code from several open source mods that difer from their originals, but owe homage and credit to the hard work of the orginal mod creators that did the ground work that allowed these modified versions to exist. A list of mods and thier creators that were used by CompanyCommander is here:
+
+Code is branched from:
+* BiggerDrops by morphyum (Drop Management)
+
+(unmodified) Mods used by Company Commander:
+* MissionControl by CWolf
+* Community Assets by Bt-Modders-Community
+* ModTek by the ModTek team
+* PanicSystem by Gnivler
