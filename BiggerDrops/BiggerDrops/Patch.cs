@@ -131,14 +131,14 @@ namespace DropManagement
                 var scrollRect = panel.gameObject.AddComponent<ScrollRect>();
                 Logger.M.TWL(0, "maxUnits: " + maxUnits);
                 LanceLoadoutSlot[] loadoutSlots = (LanceLoadoutSlot[])AccessTools.Field(typeof(LanceConfiguratorPanel), "loadoutSlots").GetValue(panel);
-                
+
                 if (maxUnits <= loadoutSlots.Length)
                 {
                     Logger.M.TWL(1, "already fixed");
                     return;
                 };
                 GameObject primelayout = panel.transform.FindRecursive("uixPrfPanel_LC_LanceSlots-Widget-MANAGED").gameObject;
-                
+
                 //Setup Lance Count
                 List<LanceLoadoutSlot> list = loadoutSlots.ToList();
                 //Remove already present lance slots
@@ -165,18 +165,7 @@ namespace DropManagement
                 aiText.text = DropManagement.settings.secondLanceName;
                 GameObject charlieLayout = null;
 
-                var content = new GameObject("content", new[] { typeof(ContentSizeFitter), typeof(RectTransform) });
-
-                content.transform.position = new Vector3(650, 395, primelayout.transform.position.z);
-                var contentTransform = content.GetComponent<RectTransform>();
-                contentTransform.SetParent(primelayout.transform.parent, false);
-                contentTransform.sizeDelta = new Vector2(600, 450);
-                //contentTransform.SetPositionAndRotation(new Vector3(650, 395, primelayout.transform.position.z), Quaternion.identity);
-                contentTransform.SetPositionAndRotation(new Vector3(950, 600, primelayout.transform.position.z), Quaternion.identity);
-                //contentTransform.rect = new Rect(new Vector2(650, 395), new Vector2(600, 400));
-                var contnetFitter = content.GetComponent<ContentSizeFitter>();
-                contnetFitter.verticalFit = ContentSizeFitter.FitMode.Unconstrained;
-                scrollRect.content = contentTransform;
+                RectTransform contentTransform = createScrollView(scrollRect, primelayout);
                 primelayout.transform.SetParent(contentTransform, true);
                 betaLayout.transform.SetParent(contentTransform, true);
 
@@ -187,6 +176,7 @@ namespace DropManagement
                     aiText.text = DropManagement.settings.thirdLanceName;
                     charlieLayout.transform.position = new Vector3(650, 50, primelayout.transform.position.z);
                     charlieLayout.transform.localScale = new Vector3(0.7f, 0.5f, 0.5f);
+                    charlieLayout.transform.SetParent(contentTransform, true);
                 }
                 loadoutSlots = list.ToArray<LanceLoadoutSlot>();
 
@@ -195,11 +185,7 @@ namespace DropManagement
                 primelayout.transform.localScale = new Vector3(0.7f, 0.5f, 0.5f);
                 betaLayout.transform.position = new Vector3(650, 200, primelayout.transform.position.z);
                 betaLayout.transform.localScale = new Vector3(0.7f, 0.5f, 0.5f);
-               
-                if (charlieLayout !=null)
-                {
-                    charlieLayout.transform.SetParent(contentTransform, true);
-                }
+
                 GameObject deployButton = panel.transform.FindRecursive("DeployBttn-layout").gameObject;
                 deployButton.transform.position = new Vector3(1675, 175, deployButton.transform.position.z);
 
@@ -245,6 +231,21 @@ namespace DropManagement
             {
                 Logger.M.TWL(0, e.ToString());
             }
+        }
+
+        private static RectTransform createScrollView(ScrollRect scrollRect, GameObject primelayout)
+        {
+            var content = new GameObject("content", new[] { typeof(ContentSizeFitter), typeof(RectTransform) });
+            content.transform.position = new Vector3(650, 395, primelayout.transform.position.z);
+            var contentTransform = content.GetComponent<RectTransform>();
+            contentTransform.SetParent(primelayout.transform.parent, false);
+            contentTransform.sizeDelta = new Vector2(600, 450);
+            contentTransform.SetPositionAndRotation(new Vector3(950, 600, primelayout.transform.position.z), Quaternion.identity);
+
+            var contnetFitter = content.GetComponent<ContentSizeFitter>();
+            contnetFitter.verticalFit = ContentSizeFitter.FitMode.Unconstrained;
+            scrollRect.content = contentTransform;
+            return contentTransform;
         }
 
         private static GameObject createNewLancePanel(GameObject primelayout, List<LanceLoadoutSlot> list, int addUnits, string lanceName)
